@@ -1,3 +1,3 @@
 # without-bom README
 
-remove BOM for UTF-8 BOM text file
+Remove the BOM from text files encoded with UTF-8 with BOM.

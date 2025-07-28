@@ -3,6 +3,7 @@
   "displayName": "Without-BOM",
   "description": "删除文本文件的BOM(UTF-8)",
   "repository": "https://github.com/animitta/vscode-extensions/without-bom",
+  "icon": "icon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.102.0"
@@ -16,12 +17,19 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "without-bom",
-        "title": "Without UTF-8 BOM"
+    "configuration": {
+      "title": "UTF8 Without BOM",
+      "properties": {
+        "withoutBom.excludeFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Relative paths (from workspace root) of folders to exclude from BOM removal."
+        }
       }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
