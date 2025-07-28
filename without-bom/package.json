@@ -1,7 +1,8 @@
 {
+  "publisher": "animitta",
   "name": "without-bom",
   "displayName": "Without-BOM",
-  "description": "删除文本文件的BOM(UTF-8)",
+  "description": "Remove the BOM from a UTF-8 text file.",
   "repository": "https://github.com/animitta/vscode-extensions/without-bom",
   "icon": "icon.png",
   "version": "0.0.1",
