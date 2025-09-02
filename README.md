@@ -17,3 +17,9 @@ vsce package
 
 vsce publish
 ```
+
+## Acknowledgments
+
+This was created as a fork from [animitta/vscode-extensions](https://github.com/animitta/vscode-extensions)
+
+Original copyright: MIT License, Copyright (c) 2025 animitta
