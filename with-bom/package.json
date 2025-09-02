@@ -21,13 +21,13 @@
     "configuration": {
       "title": "UTF8 With BOM",
       "properties": {
-        "withBom.excludeFolders": {
+        "withBom.includeFolders": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": [],
-          "description": "Relative paths (from workspace root) of folders to exclude from BOM removal."
+          "description": "Relative paths (from workspace root) of folders to include in BOM addition."
         }
       }
     }
@@ -49,13 +49,13 @@
   "devDependencies": {
     "@types/vscode": "^1.102.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "24.x",
+    "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
     "eslint": "^9.34.0",
     "esbuild": "^0.25.9",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.9.2",
+    "typescript": "^5.1.3",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2"
   }

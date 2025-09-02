@@ -17,9 +17,9 @@ function addUtf8BomIfMissing(buffer: Buffer): Buffer {
     return Buffer.concat([bom, buffer]);
 }
 
-function isExcluded(filePath: string, workspaceFolder: string, excluded: string[]): boolean {
+function isIncluded(filePath: string, workspaceFolder: string, included: string[]): boolean {
     const relativePath = path.relative(workspaceFolder, filePath);
-    return excluded.some(folder =>
+    return included.some(folder =>
         relativePath === folder || relativePath.startsWith(folder + path.sep)
     );
 }
@@ -41,9 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         const config = vscode.workspace.getConfiguration('withBom');
-        const excludedFolders: string[] = config.get('excludeFolders') || [];
+        const includedFolders: string[] = config.get('includeFolders') || [];
 
-        if (isExcluded(filePath, workspaceFolder, excludedFolders)) {
+        if (!isIncluded(filePath, workspaceFolder, includedFolders)) {
             return;
         }
 
