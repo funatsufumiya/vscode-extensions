@@ -20,12 +20,13 @@ function addUtf8BomIfMissing(buffer: Buffer): Buffer {
 function isIncluded(filePath: string, workspaceFolder: string, included: string[]): boolean {
     const relativePath = path.relative(workspaceFolder, filePath);
     return included.some(folder =>
-        relativePath === folder || relativePath.startsWith(folder + path.sep)
+        (filePath === folder || filePath.startsWith(folder + path.sep)) ||
+        (relativePath === folder || relativePath.startsWith(folder + path.sep))
     );
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    const disposable = vscode.workspace.onDidOpenTextDocument(async (document: vscode.TextDocument) => {
+    const disposable = vscode.workspace.onDidSaveTextDocument(async (document: vscode.TextDocument) => {
         if (document.isUntitled || document.languageId === 'binary' || document.isDirty) {
             return;
         }
@@ -44,8 +45,13 @@ export function activate(context: vscode.ExtensionContext) {
         const includedFolders: string[] = config.get('includeFolders') || [];
 
         if (!isIncluded(filePath, workspaceFolder, includedFolders)) {
+            // // debug
+            // vscode.window.showInformationMessage(`rejected: ${filePath}, ${includedFolders}`);
             return;
         }
+
+        // // debug
+        // vscode.window.showInformationMessage(`included: ${filePath}, ${includedFolders}`);
 
         try {
             const encoding = vscode.workspace.getConfiguration('files', document.uri).get<string>('encoding');
@@ -64,7 +70,8 @@ export function activate(context: vscode.ExtensionContext) {
 
             const reopened = await vscode.workspace.openTextDocument(filePath);
             await vscode.window.showTextDocument(reopened, { preview: false });
-            vscode.window.setStatusBarMessage('✅ UTF-8 BOM added and saved', 3000);
+            vscode.window.showInformationMessage(`withBom: UTF-8 BOM added and saved`);
+            // vscode.window.setStatusBarMessage('✅ UTF-8 BOM added and saved', 3000);
         } catch (e) {
             console.error('Error adding BOM:', e);
         }

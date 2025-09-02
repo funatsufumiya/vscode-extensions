@@ -14,7 +14,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onDidOpenTextDocument"
+    "onDidSaveTextDocument"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -27,7 +27,7 @@
             "type": "string"
           },
           "default": [],
-          "description": "Relative paths (from workspace root) of folders to include in BOM addition."
+          "description": "Absolute paths or relative paths (from workspace folder) of folders to include in BOM addition."
         }
       }
     }
