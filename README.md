@@ -1,13 +1,15 @@
 # VSCode Extensions
 
-## 环境配置
+## Development
+
 ```bash
 npm install --global yo generator-code
 npm install -g @vscode/vsce
 yo code
 ```
 
-## 发布
+## Publish
+
 ```bash
 vsce package
 
