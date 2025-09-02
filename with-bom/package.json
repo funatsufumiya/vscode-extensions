@@ -3,7 +3,7 @@
   "name": "without-bom",
   "displayName": "Without-BOM",
   "description": "Remove the BOM from a UTF-8 text file.",
-  "repository": "https://github.com/animitta/vscode-extensions/without-bom",
+  "repository": "https://github.com/funatsufumiya/vscode-extensions/with-bom",
   "icon": "icon.png",
   "version": "0.0.1",
   "engines": {
@@ -19,9 +19,9 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-      "title": "UTF8 Without BOM",
+      "title": "UTF8 With BOM",
       "properties": {
-        "withoutBom.excludeFolders": {
+        "withBom.excludeFolders": {
           "type": "array",
           "items": {
             "type": "string"

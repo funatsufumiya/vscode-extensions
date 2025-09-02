@@ -9,6 +9,14 @@ function hasUtf8Bom(buffer: Buffer): boolean {
         buffer[2] === 0xBF;
 }
 
+function addUtf8BomIfMissing(buffer: Buffer): Buffer {
+    if (hasUtf8Bom(buffer)) {
+        return buffer;
+    }
+    const bom = Buffer.from([0xEF, 0xBB, 0xBF]);
+    return Buffer.concat([bom, buffer]);
+}
+
 function isExcluded(filePath: string, workspaceFolder: string, excluded: string[]): boolean {
     const relativePath = path.relative(workspaceFolder, filePath);
     return excluded.some(folder =>
@@ -17,7 +25,7 @@ function isExcluded(filePath: string, workspaceFolder: string, excluded: string[
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    const disposable = vscode.workspace.onDidOpenTextDocument(async (document) => {
+    const disposable = vscode.workspace.onDidOpenTextDocument(async (document: vscode.TextDocument) => {
         if (document.isUntitled || document.languageId === 'binary' || document.isDirty) {
             return;
         }
@@ -32,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const config = vscode.workspace.getConfiguration('withoutBom');
+        const config = vscode.workspace.getConfiguration('withBom');
         const excludedFolders: string[] = config.get('excludeFolders') || [];
 
         if (isExcluded(filePath, workspaceFolder, excludedFolders)) {
@@ -40,19 +48,25 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         try {
+            const encoding = vscode.workspace.getConfiguration('files', document.uri).get<string>('encoding');
+            if (encoding && encoding.toLowerCase() !== 'utf8' && encoding.toLowerCase() !== 'utf-8') {
+                return;
+            }
+
             const fileBuffer = fs.readFileSync(filePath);
-            if (!hasUtf8Bom(fileBuffer)) {
+            if (hasUtf8Bom(fileBuffer)) {
                 return;
             }
 
             const newText = document.getText();
-            fs.writeFileSync(filePath, newText, { encoding: 'utf8' });
+            const newBuffer = addUtf8BomIfMissing(Buffer.from(newText, 'utf8'));
+            fs.writeFileSync(filePath, newBuffer as any);
 
             const reopened = await vscode.workspace.openTextDocument(filePath);
             await vscode.window.showTextDocument(reopened, { preview: false });
-            vscode.window.setStatusBarMessage('✅ UTF-8 BOM removed and saved', 3000);
+            vscode.window.setStatusBarMessage('✅ UTF-8 BOM added and saved', 3000);
         } catch (e) {
-            console.error('Error checking BOM:', e);
+            console.error('Error adding BOM:', e);
         }
     });
 
