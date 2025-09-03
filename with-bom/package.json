@@ -5,7 +5,7 @@
   "description": "Add the BOM to a UTF-8 text file.",
   "repository": "https://github.com/funatsufumiya/vscode-extensions/with-bom",
   "icon": "icon.png",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.102.0"
   },
